@@ -13,15 +13,16 @@ def main():
     trackbarName = 'Trackbar'
     createWindowWithTrackbar(windowName, trackbarName)
 
-    denoiseWindow = 'Denoise Window'
+    denoiseWindowName = 'Denoise Window'
     denoiseWindowTb = 'Denoise Window TB'
-    createWindowWithTrackbar(denoiseWindow, denoiseWindowTb, 1, 7) # No pongas 0 crashea
+    createWindowWithTrackbar(denoiseWindowName, denoiseWindowTb, 1, 7) # No pongas 0 crashea
 
     key = 'a'
 
     while key != ord('z'):
         # 1 - Get original image
         _, originalImage = webcam.read()
+        originalImage = cv.flip(originalImage, 1) # espejamos para que se vea bien
         # cv.imshow('Original image', originalImage)
 
         # 2 - Get binary image
@@ -30,13 +31,25 @@ def main():
         cv.imshow(windowName, binaryImage)
 
         # 3 - Remove noise
-        radius = cv.getTrackbarPos(denoiseWindowTb, denoiseWindow)
+        radius = cv.getTrackbarPos(denoiseWindowTb, denoiseWindowName)
         denoisedImage = denoiseImage(binaryImage, radius)
-        
-        cv.imshow(denoiseWindow, denoisedImage)
 
+        cv.imshow(denoiseWindowName, denoisedImage)
+
+        # 4 - Contours
+        contours, hierarchy = cv.findContours(denoisedImage, cv.RETR_TREE, cv.CHAIN_APPROX_NONE)
+        cv.drawContours(originalImage, contours, -1, (100, 0, 100), 2)
+        cv.imshow("Contours Window", originalImage) #muestra contornos violetas pelados
+        #convex_hull(contours, originalImage) # muestra contornos con convexHull
 
         key = cv.waitKey(30)
+
+def convex_hull(contours, originalImage):
+    hull = []
+    for cnt in contours:
+        hull.append(cv.convexHull(cnt, False))
+    cv.drawContours(originalImage, hull, -1, (255, 0, 0), 3)
+    cv.imshow("Contours", originalImage)
 
 def denoiseImage(binaryImage, radius):
     kernel = cv.getStructuringElement(cv.MORPH_ELLIPSE, (radius, radius))  # kernel = structural element shape in which 
