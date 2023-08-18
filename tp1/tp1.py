@@ -29,13 +29,12 @@ def main():
         # 2 - Get binary image
         binaryValue = cv.getTrackbarPos(trackbarName, windowName)
         binaryImage = getBinaryImage(originalImage, binaryValue)
-        cv.imshow(windowName, binaryImage)
+        cv.imshow(windowName, binaryImage) # Required
 
         # 3 - Remove noise
         radius = cv.getTrackbarPos(denoiseWindowTb, denoiseWindowName)
-        denoisedImage = denoiseImage(binaryImage, radius)
-
-        cv.imshow(denoiseWindowName, denoisedImage)
+        denoisedImage = denoiseImage(binaryImage, radius) 
+        cv.imshow(denoiseWindowName, denoisedImage) # Required
 
         # 4 - Contours
         contours, hierarchy = cv.findContours(denoisedImage, cv.RETR_TREE, cv.CHAIN_APPROX_NONE)
