@@ -5,8 +5,9 @@ def main():
     # circleToCompare = getContoursByShape('./tp1/555.png', 100)
     # squareToCompare = getContoursByShape('./tp1/square3.png', 100)
     # triangleToCompare = getContoursByShape('./tp1/triangle.png', 100)
+    imageToCompare = getContoursByImage('./circle.png', 100)
 
-    webcam = cv.VideoCapture(0)
+    webcam = cv.VideoCapture(1)
 
     # Window + trackbar creation
     windowName = 'Tp1'
@@ -42,6 +43,24 @@ def main():
         cv.imshow("Contours Window", originalImage) #muestra contornos violetas pelados
         #convex_hull(contours, originalImage) # muestra contornos con convexHull
 
+        # 5 - Filter contours
+        contours = [contour for contour in contours if cv.contourArea(contour) > 10000]
+        if len(contours) > 0 :
+            contours.pop(0)
+
+        # 6 - Compare contours
+        contoursToPrint = []
+        for contour in contours:
+            if cv.matchShapes(imageToCompare, contour, cv.CONTOURS_MATCH_I2, 0) < 0.03:
+                contoursToPrint.append(contour)
+                x, y, w, h = cv.boundingRect(contour)
+                cv.putText(originalImage, 'Circle', (x, y), cv.FONT_ITALIC, 4, (255, 255, 255), 1, cv.LINE_4)
+
+        for contourToPrint in contoursToPrint:
+            cv.drawContours(originalImage, contourToPrint, -1, (255, 0, 127), 3)
+
+        cv.imshow('Original Image', originalImage)
+
         key = cv.waitKey(30)
 
 def convex_hull(contours, originalImage):
@@ -62,17 +81,18 @@ def getBinaryImage(image, value):
     return thresh
 
 
-def getContoursByShape(image_route, thresh_bottom):
+def getContoursByImage(image_route, thresh_bottom):
     shape = cv.imread(image_route)
     grayShape = cv.cvtColor(shape, cv.COLOR_BGR2GRAY)
     ret, shapeThresh = cv.threshold(grayShape, thresh_bottom, 255, cv.THRESH_BINARY_INV)
     shapeContours, hierarchy = cv.findContours(shapeThresh, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
-    cv.drawContours(image=shape, contours=shapeContours, contourIdx=-1, color=(255, 255, 0), thickness=3)
+    cv.drawContours(shape, shapeContours, -1, (255, 255, 0), 3)
     return shapeContours[0]
 
 def createWindowWithTrackbar(windowName, trackbarName, initRange = 0, endRange = 255):
     cv.namedWindow(windowName)
     cv.createTrackbar(trackbarName, windowName, initRange, endRange, (lambda a: None))
+
 
 main()
 cv.destroyAllWindows()
