@@ -39,7 +39,7 @@ def main():
         # 4 - Contours
         contours, hierarchy = cv.findContours(denoisedImage, cv.RETR_TREE, cv.CHAIN_APPROX_NONE)
 
-        # 6 - Compare contours
+        # 6 - Filter and compare contours
         contoursToPrint = []
         for contour in contours:
             if cv.contourArea(contour) > 10000: # Checks that contour size is big enough
