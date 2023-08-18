@@ -2,10 +2,9 @@ import cv2 as cv
 
 
 def main():
-    # circleToCompare = getContoursByShape('./tp1/555.png', 100)
-    # squareToCompare = getContoursByShape('./tp1/square3.png', 100)
-    # triangleToCompare = getContoursByShape('./tp1/triangle.png', 100)
-    imageToCompare = getContoursByImage('./circle.png', 100)
+    circleContour = getContoursByImage('./circle.png', 100)
+    # squareContour = getContoursByImage('./square.png', 100)
+    # triangleContour = getContoursByImage('./triangle.png', 100)
 
     webcam = cv.VideoCapture(0)
 
@@ -43,7 +42,7 @@ def main():
         contoursToPrint = []
         for contour in contours:
             if cv.contourArea(contour) > 10000: # Checks that contour size is big enough
-                if cv.matchShapes(imageToCompare, contour, cv.CONTOURS_MATCH_I2, 0) < 0.03:
+                if cv.matchShapes(circleContour, contour, cv.CONTOURS_MATCH_I2, 0) < 0.03:
                     contoursToPrint.append(contour)
                     x, y, w, h = cv.boundingRect(contour)
                     cv.putText(originalImage, 'Circle', (x, y), cv.FONT_ITALIC, 4, (255, 255, 255), 1, cv.LINE_4)
