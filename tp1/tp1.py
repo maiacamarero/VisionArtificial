@@ -39,20 +39,20 @@ def main():
         contours, hierarchy = cv.findContours(denoisedImage, cv.RETR_TREE, cv.CHAIN_APPROX_NONE)
 
         # 6 - Filter and compare contours
-        contoursToPrint = []
         for contour in contours:
             if cv.contourArea(contour) > 10000: # Checks that contour size is big enough
-                if cv.matchShapes(circleContour, contour, cv.CONTOURS_MATCH_I2, 0) < 0.03:
-                    contoursToPrint.append(contour)
+                if doesContourMatchShapesContour(circleContour, contour):
                     x, y, w, h = cv.boundingRect(contour)
                     cv.putText(originalImage, 'Circle', (x, y), cv.FONT_ITALIC, 4, (255, 255, 255), 1, cv.LINE_4)
-
-        for contourToPrint in contoursToPrint:
-            cv.drawContours(originalImage, contourToPrint, -1, (255, 0, 127), 3)
+                    cv.drawContours(originalImage, contour, -1, (255, 0, 127), 3)
 
         cv.imshow('Original Image', originalImage)
 
         key = cv.waitKey(30)
+
+def doesContourMatchShapesContour(circleContour, contour):
+    return cv.matchShapes(circleContour, contour, cv.CONTOURS_MATCH_I2, 0) < 0.03
+
 
 def convex_hull(contours, originalImage):
     hull = []
