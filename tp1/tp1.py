@@ -42,9 +42,7 @@ def main():
         for contour in contours:
             if cv.contourArea(contour) > 10000: # Checks that contour size is big enough
                 if doesContourMatchShapesContour(circleContour, contour):
-                    x, y, w, h = cv.boundingRect(contour)
-                    cv.putText(originalImage, 'Circle', (x, y), cv.FONT_ITALIC, 4, (255, 255, 255), 1, cv.LINE_4)
-                    cv.drawContours(originalImage, contour, -1, (255, 0, 127), 3)
+                    displayValidShape(contour,'Circle',originalImage)
 
         cv.imshow('Original Image', originalImage)
 
@@ -53,6 +51,10 @@ def main():
 def doesContourMatchShapesContour(circleContour, contour):
     return cv.matchShapes(circleContour, contour, cv.CONTOURS_MATCH_I2, 0) < 0.03
 
+def displayValidShape(contour, shapeName, originalImage):
+    x, y, _, _ = cv.boundingRect(contour)
+    cv.putText(originalImage, shapeName, (x, y), cv.FONT_ITALIC, 4, (255, 255, 255), 1, cv.LINE_4)
+    cv.drawContours(originalImage, contour, -1, (255, 0, 127), 3)
 
 def convex_hull(contours, originalImage):
     hull = []
