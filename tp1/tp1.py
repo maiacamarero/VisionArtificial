@@ -7,7 +7,7 @@ def main():
     # triangleToCompare = getContoursByShape('./tp1/triangle.png', 100)
     imageToCompare = getContoursByImage('./circle.png', 100)
 
-    webcam = cv.VideoCapture(1)
+    webcam = cv.VideoCapture(0)
 
     # Window + trackbar creation
     windowName = 'Tp1'
@@ -29,32 +29,24 @@ def main():
         # 2 - Get binary image
         binaryValue = cv.getTrackbarPos(trackbarName, windowName)
         binaryImage = getBinaryImage(originalImage, binaryValue)
-        cv.imshow(windowName, binaryImage)
+        cv.imshow(windowName, binaryImage) # Required
 
         # 3 - Remove noise
         radius = cv.getTrackbarPos(denoiseWindowTb, denoiseWindowName)
-        denoisedImage = denoiseImage(binaryImage, radius)
-
-        cv.imshow(denoiseWindowName, denoisedImage)
+        denoisedImage = denoiseImage(binaryImage, radius) 
+        cv.imshow(denoiseWindowName, denoisedImage) # Required
 
         # 4 - Contours
         contours, hierarchy = cv.findContours(denoisedImage, cv.RETR_TREE, cv.CHAIN_APPROX_NONE)
-        cv.drawContours(originalImage, contours, -1, (100, 0, 100), 2)
-        cv.imshow("Contours Window", originalImage) #muestra contornos violetas pelados
-        #convex_hull(contours, originalImage) # muestra contornos con convexHull
 
-        # 5 - Filter contours
-        contours = [contour for contour in contours if cv.contourArea(contour) > 10000]
-        if len(contours) > 0 :
-            contours.pop(0)
-
-        # 6 - Compare contours
+        # 6 - Filter and compare contours
         contoursToPrint = []
         for contour in contours:
-            if cv.matchShapes(imageToCompare, contour, cv.CONTOURS_MATCH_I2, 0) < 0.03:
-                contoursToPrint.append(contour)
-                x, y, w, h = cv.boundingRect(contour)
-                cv.putText(originalImage, 'Circle', (x, y), cv.FONT_ITALIC, 4, (255, 255, 255), 1, cv.LINE_4)
+            if cv.contourArea(contour) > 10000: # Checks that contour size is big enough
+                if cv.matchShapes(imageToCompare, contour, cv.CONTOURS_MATCH_I2, 0) < 0.03:
+                    contoursToPrint.append(contour)
+                    x, y, w, h = cv.boundingRect(contour)
+                    cv.putText(originalImage, 'Circle', (x, y), cv.FONT_ITALIC, 4, (255, 255, 255), 1, cv.LINE_4)
 
         for contourToPrint in contoursToPrint:
             cv.drawContours(originalImage, contourToPrint, -1, (255, 0, 127), 3)
