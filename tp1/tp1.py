@@ -2,9 +2,11 @@ import cv2 as cv
 
 
 def main():
-    circleContour = getContoursByImage('./circle.png', 100)
-    # squareContour = getContoursByImage('./square.png', 100)
-    # triangleContour = getContoursByImage('./triangle.png', 100)
+    contourAndContourNames = [
+        (getContoursByImage('./square.png', 100), 'Square'),
+        (getContoursByImage('./triangle.png', 100), 'Triangle'),
+        (getContoursByImage('./circle.png', 100), 'Circle'),
+    ]
 
     webcam = cv.VideoCapture(0)
 
@@ -23,7 +25,6 @@ def main():
         # 1 - Get original image
         _, originalImage = webcam.read()
         originalImage = cv.flip(originalImage, 1) # espejamos para que se vea bien
-        # cv.imshow('Original image', originalImage)
 
         # 2 - Get binary image
         binaryValue = cv.getTrackbarPos(trackbarName, windowName)
@@ -41,8 +42,10 @@ def main():
         # 6 - Filter and compare contours
         for contour in contours:
             if cv.contourArea(contour) > 10000: # Checks that contour size is big enough
-                if doesContourMatchShapesContour(circleContour, contour):
-                    displayValidShape(contour,'Circle',originalImage)
+                for contourShape, contourName in contourAndContourNames:
+                    if doesContourMatchShapesContour(contourShape, contour):
+                        displayValidShape(contour, contourName, originalImage)
+                        break
 
         cv.imshow('Original Image', originalImage)
 
@@ -53,7 +56,7 @@ def doesContourMatchShapesContour(circleContour, contour):
 
 def displayValidShape(contour, shapeName, originalImage):
     x, y, _, _ = cv.boundingRect(contour)
-    cv.putText(originalImage, shapeName, (x, y), cv.FONT_ITALIC, 4, (255, 255, 255), 1, cv.LINE_4)
+    cv.putText(originalImage, shapeName, (x, y), cv.FONT_ITALIC, 4, (255, 0, 127), 1, cv.LINE_4)
     cv.drawContours(originalImage, contour, -1, (255, 0, 127), 3)
 
 def convex_hull(contours, originalImage):
