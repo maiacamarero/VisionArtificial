@@ -56,7 +56,7 @@ def doesContourMatchShapesContour(circleContour, contour):
 
 def displayValidShape(contour, shapeName, originalImage):
     x, y, _, _ = cv.boundingRect(contour)
-    cv.putText(originalImage, shapeName, (x, y), cv.FONT_ITALIC, 4, (255, 0, 127), 1, cv.LINE_4)
+    cv.putText(originalImage, shapeName, (x, y), cv.FONT_ITALIC, 2, (255, 0, 127), 1, cv.LINE_4)
     cv.drawContours(originalImage, contour, -1, (255, 0, 127), 3)
 
 def convex_hull(contours, originalImage):
