@@ -38,6 +38,7 @@ def main():
 
         # 4 - Contours
         contours, hierarchy = cv.findContours(denoisedImage, cv.RETR_TREE, cv.CHAIN_APPROX_NONE)
+        #cv.drawContours(originalImage, contours, -1, (0, 0, 255), 2)
 
         # 6 - Filter and compare contours
         for contour in contours:
@@ -56,8 +57,8 @@ def doesContourMatchShapesContour(contourShape, contour):
 
 def displayValidShape(contour, shapeName, originalImage):
     x, y, _, _ = cv.boundingRect(contour)
-    cv.putText(originalImage, shapeName, (x, y), cv.FONT_ITALIC, 2, (255, 0, 127), 1, cv.LINE_4)
-    cv.drawContours(originalImage, contour, -1, (255, 0, 127), 3)
+    cv.putText(originalImage, shapeName, (x, y), cv.FONT_ITALIC, 1.5, (255, 255, 255), 1, cv.LINE_4)
+    cv.drawContours(originalImage, contour, -1, (0, 255, 0), 3)
 
 def denoiseImage(binaryImage, radius):
     kernel = cv.getStructuringElement(cv.MORPH_ELLIPSE, (radius, radius))  # kernel = structural element shape in which 
@@ -75,7 +76,7 @@ def getContoursByImage(image_route, thresh_bottom):
     grayShape = cv.cvtColor(shape, cv.COLOR_BGR2GRAY)
     ret, shapeThresh = cv.threshold(grayShape, thresh_bottom, 255, cv.THRESH_BINARY_INV)
     shapeContours, hierarchy = cv.findContours(shapeThresh, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
-    cv.drawContours(shape, shapeContours, -1, (255, 255, 0), 3)
+    #cv.drawContours(shape, shapeContours, -1, (0, 0, 255), 3)
     return shapeContours[0]
 
 def createWindowWithTrackbar(windowName, trackbarName, initRange = 0, endRange = 255):
