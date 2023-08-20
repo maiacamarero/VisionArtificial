@@ -8,7 +8,7 @@ def main():
         (getContoursByImage('./circle.png', 100), 'Circle'),
     ]
 
-    webcam = cv.VideoCapture(0)
+    webcam = cv.VideoCapture(1)
 
     # Window + trackbar creation
     windowName = 'Tp1'
@@ -51,20 +51,13 @@ def main():
 
         key = cv.waitKey(30)
 
-def doesContourMatchShapesContour(circleContour, contour):
-    return cv.matchShapes(circleContour, contour, cv.CONTOURS_MATCH_I2, 0) < 0.03
+def doesContourMatchShapesContour(contourShape, contour):
+    return cv.matchShapes(contourShape, contour, 1, 0.0) < 0.03
 
 def displayValidShape(contour, shapeName, originalImage):
     x, y, _, _ = cv.boundingRect(contour)
     cv.putText(originalImage, shapeName, (x, y), cv.FONT_ITALIC, 2, (255, 0, 127), 1, cv.LINE_4)
     cv.drawContours(originalImage, contour, -1, (255, 0, 127), 3)
-
-def convex_hull(contours, originalImage):
-    hull = []
-    for cnt in contours:
-        hull.append(cv.convexHull(cnt, False))
-    cv.drawContours(originalImage, hull, -1, (255, 0, 0), 3)
-    cv.imshow("Contours", originalImage)
 
 def denoiseImage(binaryImage, radius):
     kernel = cv.getStructuringElement(cv.MORPH_ELLIPSE, (radius, radius))  # kernel = structural element shape in which 
