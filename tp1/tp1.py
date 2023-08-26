@@ -38,15 +38,18 @@ def main():
 
         # 4 - Contours
         contours, hierarchy = cv.findContours(denoisedImage, cv.RETR_TREE, cv.CHAIN_APPROX_NONE)
-        #cv.drawContours(originalImage, contours, -1, (0, 0, 255), 2)
 
         # 6 - Filter and compare contours
         for contour in contours:
             if cv.contourArea(contour) > 10000: # Checks that contour size is big enough
+                allDefinedShapesInvalid = True
                 for contourShape, contourName in contourAndContourNames:
                     if doesContourMatchShapesContour(contourShape, contour):
+                        allDefinedShapesInvalid = False
                         displayValidShape(contour, contourName, originalImage)
                         break
+                if allDefinedShapesInvalid:
+                    displayInvalidShape(contour, originalImage)
 
         cv.imshow('Original Image', originalImage)
 
@@ -54,6 +57,11 @@ def main():
 
 def doesContourMatchShapesContour(contourShape, contour):
     return cv.matchShapes(contourShape, contour, 1, 0.0) < 0.03
+
+def displayInvalidShape(contour, originalImage):
+    x, y, _, _ = cv.boundingRect(contour)
+    cv.putText(originalImage, "Invalid", (x, y), cv.FONT_ITALIC, 1.5, (255, 255, 255), 1, cv.LINE_4)
+    cv.drawContours(originalImage, contour, -1, (0, 0, 255), 3)
 
 def displayValidShape(contour, shapeName, originalImage):
     x, y, _, _ = cv.boundingRect(contour)
@@ -76,7 +84,6 @@ def getContoursByImage(image_route, thresh_bottom):
     grayShape = cv.cvtColor(shape, cv.COLOR_BGR2GRAY)
     ret, shapeThresh = cv.threshold(grayShape, thresh_bottom, 255, cv.THRESH_BINARY_INV)
     shapeContours, hierarchy = cv.findContours(shapeThresh, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
-    #cv.drawContours(shape, shapeContours, -1, (0, 0, 255), 3)
     return shapeContours[0]
 
 def createWindowWithTrackbar(windowName, trackbarName, initRange = 0, endRange = 255):
