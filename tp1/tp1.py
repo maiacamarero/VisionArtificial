@@ -4,7 +4,6 @@ import variables
 
 
 def main():
-    shapePrecisionThreshold = 0
 
     webcam = cv.VideoCapture(variables.videoCaptureId)
 
@@ -58,10 +57,7 @@ def main():
         # 6 - Get Contours
         contours, hierarchy = cv.findContours(denoisedImage, cv.RETR_TREE, cv.CHAIN_APPROX_NONE)
 
-        # 7 - COMPROBAMOS QUE DETECTE BIEN LOS CONTORNOS (debugear)
-        orignialImageCopy = originalImage
-
-        # 8 - Filter and compare contours
+        # 7 - Filter and compare contours
         for contour in contours:
             if cv.contourArea(contour) > shapeContourSize: # Checks that contour size is big enough fot taking into account
                 allDefinedShapesInvalid = True
