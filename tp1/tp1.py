@@ -19,21 +19,22 @@ def main():
     cv.createTrackbar(trackbarName, denoiseWindowName, 0, 255, (lambda a: None)) #investigar porq el valor del tercer parametro no influye en el valor minimo del trackbar
 
 
-    # creamos la window con trackbar de precision (cuanto mayor valor, mayor dificultad - mas precisa debe ser la forma)
-    createWindowWithTrackbar('contornos', 'Precision')
-
     # window original con la trackbar que regula el tamaño acpetado de las figuras a tener en cuenta
-    createWindowWithTrackbar('OriginalImage', 'TamanioContorno', 0, 100000)
+    originalImageWindowName='OriginalImage'
+    precisionTrackbarName='Precision'
+    tamanioDeContornoTrackbarName='TamanioContorno'
+    createWindowWithTrackbar(originalImageWindowName, tamanioDeContornoTrackbarName, 0, 100000)
+    cv.createTrackbar(precisionTrackbarName, originalImageWindowName, 0, 255, (lambda a: None)) #investigar porq el valor del tercer parametro no influye en el valor minimo del trackbar
 
     key = 'a'
 
     while key != ord('z'):
 
         # 1 - LECTURA DEL VALOR DE LOS TRACKBARS DE LAS 4 WINDOWS   
-        shapePrecisionThreshold = cv.getTrackbarPos('Precision', 'contornos') #obtiene el valor de precision de trackbar 
+        shapePrecisionThreshold = cv.getTrackbarPos(precisionTrackbarName, originalImageWindowName) #obtiene el valor de precision de trackbar 
         binaryValue = cv.getTrackbarPos(trackbarName, denoiseWindowName)
         radius = cv.getTrackbarPos(denoiseWindowTb, denoiseWindowName)
-        shapeContourSize = cv.getTrackbarPos('TamanioContorno', 'OriginalImage')
+        shapeContourSize = cv.getTrackbarPos(tamanioDeContornoTrackbarName, originalImageWindowName)
 
         #USO DE LOS VALORES DE LOS TRACKBARS DE LAS 4 WINDOWS
         # 2 - Get los contour prototypes (figuras de ejemplo + valor de los threshold de precision)
@@ -71,7 +72,8 @@ def main():
                 if allDefinedShapesInvalid:
                     displayInvalidShape(contour, originalImage)
 
-            cv.imshow('OriginalImage', originalImage)
+        # Show image with contours
+        cv.imshow(originalImageWindowName, originalImage)
 
         key = cv.waitKey(30)
 
