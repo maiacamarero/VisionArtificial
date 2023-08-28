@@ -24,7 +24,7 @@ def main():
     contourSizeTrackbarName='Contour size'
     cv.namedWindow(originalImageWindowName, cv.WINDOW_KEEPRATIO)
     cv.resizeWindow(originalImageWindowName, 600, 337) #pongo esto porq en mi pc las windows se veian enorme y era re incomodo
-    cv.createTrackbar(contourSizeTrackbarName, originalImageWindowName, 0, 10000, (lambda a: None)) #investigar porq el valor del tercer parametro no influye en el valor minimo del trackbar
+    cv.createTrackbar(contourSizeTrackbarName, originalImageWindowName, 2500, 10000, (lambda a: None)) #investigar porq el valor del tercer parametro no influye en el valor minimo del trackbar
     cv.createTrackbar(precisionTrackbarName, originalImageWindowName, 0, 255, (lambda a: None)) #investigar porq el valor del tercer parametro no influye en el valor minimo del trackbar
 
     key = 'a'
