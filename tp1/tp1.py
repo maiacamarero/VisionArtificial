@@ -9,11 +9,13 @@ def main():
 
     # Window + trackbar creation
     denoiseWindowName = 'Binary Image'
-    denoiseWindowTb = 'Noise'
-    binaryTrackbarName = 'Binary'
     cv.namedWindow(denoiseWindowName, cv.WINDOW_KEEPRATIO)
     cv.resizeWindow(denoiseWindowName, 600, 337) #pongo esto porq en mi pc las windows se veian enorme y era re incomodo
+
+    denoiseWindowTb = 'Noise'
     cv.createTrackbar(denoiseWindowTb, denoiseWindowName, 1, 7, (lambda a: None)) #investigar porq el valor del tercer parametro no influye en el valor minimo del trackbar
+    
+    binaryTrackbarName = 'Binary'
     cv.createTrackbar(binaryTrackbarName, denoiseWindowName, 0, 255, (lambda a: None)) #investigar porq el valor del tercer parametro no influye en el valor minimo del trackbar
 
 
