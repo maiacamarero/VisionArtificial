@@ -1,11 +1,12 @@
 
 import cv2 as cv
+import variables
 
 
 def main():
     shapePrecisionThreshold = 0
 
-    webcam = cv.VideoCapture(1)
+    webcam = cv.VideoCapture(variables.videoCaptureId)
 
     # Window + trackbar creation
     windowName = 'Tp1'
@@ -37,9 +38,9 @@ def main():
             # como yo uso windows necesito cambiar las barras al reves que si no no funciona 
             #lo metemos dentro del while para que la variable de precision de la trackbar se actualice constantemente
         contourAndContourNames = [
-            (getContoursByImage('tp1\square.png', shapePrecisionThreshold), 'Square'), 
-            (getContoursByImage('tp1\\triangle.png', shapePrecisionThreshold), 'Triangle'),
-            (getContoursByImage('tp1\circle.png', shapePrecisionThreshold), 'Circle'),
+            (getContoursByImage(variables.squareImagePath, shapePrecisionThreshold), 'Square'), 
+            (getContoursByImage(variables.triangleImagePath, shapePrecisionThreshold), 'Triangle'),
+            (getContoursByImage(variables.circleImagePath, shapePrecisionThreshold), 'Circle'),
         ]
 
         # 3 - Get original image
@@ -59,8 +60,6 @@ def main():
 
         # 7 - COMPROBAMOS QUE DETECTE BIEN LOS CONTORNOS (debugear)
         orignialImageCopy = originalImage
-        cv.drawContours(orignialImageCopy, contours, -1, (255, 0, 255), 2)
-        cv.imshow('contornos', orignialImageCopy) # threshoold de precision
 
         # 8 - Filter and compare contours
         for contour in contours:
