@@ -1,0 +1,4 @@
+# videoCaptureId=
+# squareImagePath=
+# triangleImagePath=
+# circleImagePath=
