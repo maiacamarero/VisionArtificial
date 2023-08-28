@@ -10,13 +10,13 @@ def main():
     # Window + trackbar creation
     windowName = 'Tp1'
     trackbarName = 'Trackbar'
-    createWindowWithTrackbar(windowName, trackbarName)
 
     denoiseWindowName = 'Binary Image'
     denoiseWindowTb = 'Noise'
     cv.namedWindow(denoiseWindowName, cv.WINDOW_KEEPRATIO)
     cv.resizeWindow(denoiseWindowName, 600, 337) #pongo esto porq en mi pc las windows se veian enorme y era re incomodo
     cv.createTrackbar(denoiseWindowTb, denoiseWindowName, 1, 7, (lambda a: None)) #investigar porq el valor del tercer parametro no influye en el valor minimo del trackbar
+    cv.createTrackbar(trackbarName, denoiseWindowName, 0, 255, (lambda a: None)) #investigar porq el valor del tercer parametro no influye en el valor minimo del trackbar
 
 
     # creamos la window con trackbar de precision (cuanto mayor valor, mayor dificultad - mas precisa debe ser la forma)
@@ -31,7 +31,7 @@ def main():
 
         # 1 - LECTURA DEL VALOR DE LOS TRACKBARS DE LAS 4 WINDOWS   
         shapePrecisionThreshold = cv.getTrackbarPos('Precision', 'contornos') #obtiene el valor de precision de trackbar 
-        binaryValue = cv.getTrackbarPos(trackbarName, windowName)
+        binaryValue = cv.getTrackbarPos(trackbarName, denoiseWindowName)
         radius = cv.getTrackbarPos(denoiseWindowTb, denoiseWindowName)
         shapeContourSize = cv.getTrackbarPos('TamanioContorno', 'OriginalImage')
 
@@ -51,7 +51,6 @@ def main():
 
         # 4 - Get binary image
         binaryImage = getBinaryImage(originalImage, binaryValue)
-        cv.imshow(windowName, binaryImage) # Required
 
         # 5 - Remove noise
         denoisedImage = denoiseImage(binaryImage, radius) 
