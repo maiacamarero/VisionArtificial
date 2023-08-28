@@ -12,9 +12,12 @@ def main():
     trackbarName = 'Trackbar'
     createWindowWithTrackbar(windowName, trackbarName)
 
-    denoiseWindowName = 'Denoise Window'
-    denoiseWindowTb = 'Denoise Window TB'
-    createWindowWithTrackbar(denoiseWindowName, denoiseWindowTb, 1, 7) # No pongas 0 crashea
+    denoiseWindowName = 'Binary Image'
+    denoiseWindowTb = 'Noise'
+    cv.namedWindow(denoiseWindowName, cv.WINDOW_KEEPRATIO)
+    cv.resizeWindow(denoiseWindowName, 600, 337) #pongo esto porq en mi pc las windows se veian enorme y era re incomodo
+    cv.createTrackbar(denoiseWindowTb, denoiseWindowName, 1, 7, (lambda a: None)) #investigar porq el valor del tercer parametro no influye en el valor minimo del trackbar
+
 
     # creamos la window con trackbar de precision (cuanto mayor valor, mayor dificultad - mas precisa debe ser la forma)
     createWindowWithTrackbar('contornos', 'Precision')
