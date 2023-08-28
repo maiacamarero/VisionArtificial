@@ -8,14 +8,13 @@ def main():
     webcam = cv.VideoCapture(variables.videoCaptureId)
 
     # Window + trackbar creation
-    trackbarName = 'Binary'
-
     denoiseWindowName = 'Binary Image'
     denoiseWindowTb = 'Noise'
+    binaryTrackbarName = 'Binary'
     cv.namedWindow(denoiseWindowName, cv.WINDOW_KEEPRATIO)
     cv.resizeWindow(denoiseWindowName, 600, 337) #pongo esto porq en mi pc las windows se veian enorme y era re incomodo
     cv.createTrackbar(denoiseWindowTb, denoiseWindowName, 1, 7, (lambda a: None)) #investigar porq el valor del tercer parametro no influye en el valor minimo del trackbar
-    cv.createTrackbar(trackbarName, denoiseWindowName, 0, 255, (lambda a: None)) #investigar porq el valor del tercer parametro no influye en el valor minimo del trackbar
+    cv.createTrackbar(binaryTrackbarName, denoiseWindowName, 0, 255, (lambda a: None)) #investigar porq el valor del tercer parametro no influye en el valor minimo del trackbar
 
 
     # window original con la trackbar que regula el tamaño acpetado de las figuras a tener en cuenta
@@ -33,7 +32,7 @@ def main():
 
         # 1 - LECTURA DEL VALOR DE LOS TRACKBARS DE LAS 4 WINDOWS   
         shapePrecisionThreshold = cv.getTrackbarPos(precisionTrackbarName, originalImageWindowName) #obtiene el valor de precision de trackbar 
-        binaryValue = cv.getTrackbarPos(trackbarName, denoiseWindowName)
+        binaryValue = cv.getTrackbarPos(binaryTrackbarName, denoiseWindowName)
         radius = cv.getTrackbarPos(denoiseWindowTb, denoiseWindowName)
         shapeContourSize = cv.getTrackbarPos(contourSizeTrackbarName, originalImageWindowName)
 
