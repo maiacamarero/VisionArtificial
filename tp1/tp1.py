@@ -8,8 +8,7 @@ def main():
     webcam = cv.VideoCapture(variables.videoCaptureId)
 
     # Window + trackbar creation
-    windowName = 'Tp1'
-    trackbarName = 'Trackbar'
+    trackbarName = 'Binary'
 
     denoiseWindowName = 'Binary Image'
     denoiseWindowTb = 'Noise'
@@ -20,12 +19,12 @@ def main():
 
 
     # window original con la trackbar que regula el tamaño acpetado de las figuras a tener en cuenta
-    originalImageWindowName='OriginalImage'
+    originalImageWindowName='Original Image'
     precisionTrackbarName='Precision'
-    tamanioDeContornoTrackbarName='TamanioContorno'
+    contourSizeTrackbarName='Contour size'
     cv.namedWindow(originalImageWindowName, cv.WINDOW_KEEPRATIO)
     cv.resizeWindow(originalImageWindowName, 600, 337) #pongo esto porq en mi pc las windows se veian enorme y era re incomodo
-    cv.createTrackbar(tamanioDeContornoTrackbarName, originalImageWindowName, 0, 255, (lambda a: None)) #investigar porq el valor del tercer parametro no influye en el valor minimo del trackbar
+    cv.createTrackbar(contourSizeTrackbarName, originalImageWindowName, 0, 255, (lambda a: None)) #investigar porq el valor del tercer parametro no influye en el valor minimo del trackbar
     cv.createTrackbar(precisionTrackbarName, originalImageWindowName, 0, 255, (lambda a: None)) #investigar porq el valor del tercer parametro no influye en el valor minimo del trackbar
 
     key = 'a'
@@ -36,7 +35,7 @@ def main():
         shapePrecisionThreshold = cv.getTrackbarPos(precisionTrackbarName, originalImageWindowName) #obtiene el valor de precision de trackbar 
         binaryValue = cv.getTrackbarPos(trackbarName, denoiseWindowName)
         radius = cv.getTrackbarPos(denoiseWindowTb, denoiseWindowName)
-        shapeContourSize = cv.getTrackbarPos(tamanioDeContornoTrackbarName, originalImageWindowName)
+        shapeContourSize = cv.getTrackbarPos(contourSizeTrackbarName, originalImageWindowName)
 
         #USO DE LOS VALORES DE LOS TRACKBARS DE LAS 4 WINDOWS
         # 2 - Get los contour prototypes (figuras de ejemplo + valor de los threshold de precision)
@@ -110,15 +109,6 @@ def getContoursByImage(image_route, thresh_bottom):
     shapeContours, hierarchy = cv.findContours(shapeThresh, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
     return shapeContours[0]
 
-def createWindowWithTrackbar(windowName, trackbarName, initRange = 0, endRange = 255):
-    cv.namedWindow(windowName, cv.WINDOW_KEEPRATIO)
-    cv.resizeWindow(windowName, 600, 337) #pongo esto porq en mi pc las windows se veian enorme y era re incomodo
-    cv.createTrackbar(trackbarName, windowName, initRange, endRange, (lambda a: None)) #investigar porq el valor del tercer parametro no influye en el valor minimo del trackbar
-
-def createWindow(windowName):
-    cv.namedWindow(windowName, cv.WINDOW_KEEPRATIO)
-    cv.resizeWindow(windowName, 800, 450) #pongo esto porq en mi pc las windows se veian enorme y era re incomodo
-    
 
 main()
 cv.destroyAllWindows()
