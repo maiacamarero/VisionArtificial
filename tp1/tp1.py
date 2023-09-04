@@ -5,7 +5,7 @@ import variables
 
 def main():
 
-    webcam = cv.VideoCapture(variables.videoCaptureId)
+    webcam = cv.VideoCapture(variables.webcamId)
 
     # Window + trackbar creation
     denoiseWindowName = 'Binary Image'
