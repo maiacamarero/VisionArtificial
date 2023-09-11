@@ -42,17 +42,19 @@ def main():
     global selected_key
     selected_key = 49  # 1 en ASCII
     points = []
-    # seeds = np.zeros((312, 252), np.uint8)
-    seeds = np.zeros((720, 1280), np.uint8)
+
+    cap = cv2.VideoCapture(0)
+    _, frame = cap.read()
+    h, w, _ = frame.shape
+
+    seeds = np.zeros((h, w), np.uint8)
     cv2.namedWindow(frame_window)
     cv2.namedWindow(seeds_map_window)
 
-    cap = cv2.VideoCapture(0)
     cv2.setMouseCallback(frame_window, click_event)
 
     while True:
         _, frame = cap.read()
-        # frame = cv2.imread('../static/images/water_coins.jpeg')
         frame_copy = frame.copy()
         seeds_copy = seeds.copy()
 
