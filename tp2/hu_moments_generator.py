@@ -1,92 +1,56 @@
-
-import cv2 as cv
-import variables
-import functools
-
-def main():
-
-    webcam = cv.VideoCapture(variables.webcamId)
-
-    # Window + trackbar creation
-    denoiseWindowName = 'Binary Image'
-    cv.namedWindow(denoiseWindowName, cv.WINDOW_KEEPRATIO)
-    cv.resizeWindow(denoiseWindowName, 600, 337) #pongo esto porq en mi pc las windows se veian enorme y era re incomodo
-
-    denoiseWindowTb = 'Noise'
-    cv.createTrackbar(denoiseWindowTb, denoiseWindowName, 1, 7, (lambda a: None)) #investigar porq el valor del tercer parametro no influye en el valor minimo del trackbar
-    
-    binaryTrackbarName = 'Binary'
-    cv.createTrackbar(binaryTrackbarName, denoiseWindowName, 0, 255, (lambda a: None)) #investigar porq el valor del tercer parametro no influye en el valor minimo del trackbar
+import cv2
+import csv
+import glob
+import numpy
+import math
 
 
-    # window original con la trackbar que regula el tamaño acpetado de las figuras a tener en cuenta
-    originalImageWindowName='Original Image'
-    cv.namedWindow(originalImageWindowName, cv.WINDOW_KEEPRATIO)
-    cv.resizeWindow(originalImageWindowName, 600, 337)
-    
-    key = 'a'
-
-    while key != ord('z'):
-
-        # LECTURA DEL VALOR DE LOS TRACKBARS DE LAS 4 WINDOWS   
-        binaryValue = cv.getTrackbarPos(binaryTrackbarName, denoiseWindowName)
-        radius = cv.getTrackbarPos(denoiseWindowTb, denoiseWindowName)
-
-        # Get original image
-        _, originalImage = webcam.read()
-        originalImage = cv.flip(originalImage, 1) # espejamos para que se vea bien
-
-        # Get binary image
-        binaryImage = getBinaryImage(originalImage, binaryValue)
-
-        # Remove noise
-        denoisedImage = denoiseImage(binaryImage, radius) 
-        cv.imshow(denoiseWindowName, denoisedImage) # Required
-
-        # Get Contours
-        contours, _ = cv.findContours(denoisedImage, cv.RETR_TREE, cv.CHAIN_APPROX_NONE)
-
-        getBiggestContour(contours)
-        
-        # Show image with contours
-        cv.imshow(originalImageWindowName, originalImage)
-
-        key = cv.waitKey(30)
-
-def getBiggestContour(contours):
-    return functools.reduce(lambda a, b: a if cv.contourArea(a) > cv.contourArea(b) else b, contours)
-
-def doesContourMatchShapesContour(contourShape, contour):
-    return cv.matchShapes(contourShape, contour, 1, 0.0) < 0.03
-
-def displayInvalidShape(contour, originalImage):
-    x, y, _, _ = cv.boundingRect(contour)
-    cv.putText(originalImage, "Invalid", (x, y), cv.FONT_ITALIC, 1.5, (255, 255, 255), 1, cv.LINE_4)
-    cv.drawContours(originalImage, contour, -1, (0, 0, 255), 3)
-
-def displayValidShape(contour, shapeName, originalImage):
-    x, y, _, _ = cv.boundingRect(contour)
-    cv.putText(originalImage, shapeName, (x, y), cv.FONT_ITALIC, 1.5, (255, 255, 255), 1, cv.LINE_4)
-    cv.drawContours(originalImage, contour, -1, (0, 255, 0), 3)
-
-def denoiseImage(binaryImage, radius):
-    kernel = cv.getStructuringElement(cv.MORPH_ELLIPSE, (radius, radius))  # kernel = structural element shape in which 
-    opening = cv.morphologyEx(binaryImage, cv.MORPH_OPEN, kernel)
-    return cv.morphologyEx(opening, cv.MORPH_CLOSE, kernel)
-
-def getBinaryImage(image, value):
-    grayImage = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
-    ret1, thresh = cv.threshold(grayImage, value, 255, cv.THRESH_BINARY)
-    return thresh
+# Escribo los valores de los momentos de Hu en el archivo
+def write_hu_moments(label, writer):
+    files = glob.glob('./shapes/' + label + '/*')  # label recibe el nombre de la carpeta
+    hu_moments = []
+    for file in files:
+        hu_moments.append(hu_moments_of_file(file))
+    for mom in hu_moments:
+        flattened = mom.ravel()  # paso de un array de arrays a un array simple.
+        row = numpy.append(flattened, label)  # le metes el flattened array y le agregas el label
+        writer.writerow(row)  # Escribe una linea en el archivo.
 
 
-def getContoursByImage(image_route, thresh_bottom):
-    shape = cv.imread(image_route)
-    grayShape = cv.cvtColor(shape, cv.COLOR_BGR2GRAY)
-    ret, shapeThresh = cv.threshold(grayShape, thresh_bottom, 255, cv.THRESH_BINARY_INV)
-    shapeContours, hierarchy = cv.findContours(shapeThresh, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
-    return shapeContours[0]
+def generate_hu_moments_file():
+    with open('generated-files/shapes-hu-moments.csv', 'w',
+              newline='') as file:  # Se genera un archivo nuevo (W=Write)
+        writer = csv.writer(file)
+        # Ahora escribo los momentos de Hu de cada uno de las figuras. Con el string "rectangle...etc" busca en la carpeta donde estan cada una de las imagenes
+        # generar los momentos de Hu y los escribe sobre este archivo. (LOS DE ENTRENAMIENTO).
+        write_hu_moments("5-point-star", writer)
+        write_hu_moments("rectangle", writer)
+        write_hu_moments("triangle", writer)
 
 
-main()
-cv.destroyAllWindows()
+# Encargada de generar los momentos de Hu para las imagenes
+def hu_moments_of_file(filename):
+    image = cv2.imread(filename)
+    gray = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
+    bin = cv2.adaptiveThreshold(gray, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 67, 2)
+
+    # Invert the image so the area of the UAV is filled with 1's. This is necessary since
+    # cv::findContours describes the boundary of areas consisting of 1's.
+    bin = 255 - bin # como sabemos que las figuras son negras invertimos los valores binarios para que esten en 1.
+
+    kernel = numpy.ones((3, 3), numpy.uint8)  # Tamaño del bloque a recorrer
+    # buscamos eliminar falsos positivos (puntos blancos en el fondo) para eliminar ruido.
+    bin = cv2.morphologyEx(bin, cv2.MORPH_ERODE, kernel)
+
+    contours, hierarchy = cv2.findContours(bin, cv2.RETR_LIST,
+                                           cv2.CHAIN_APPROX_SIMPLE)  # encuetra los contornos
+    shape_contour = max(contours, key=cv2.contourArea)  # Agarra el contorno de area maxima
+
+    # Calculate Moments
+    moments = cv2.moments(shape_contour)  # momentos de inercia
+    # Calculate Hu Moments
+    huMoments = cv2.HuMoments(moments)  # momentos de Hu
+    # Log scale hu moments
+    for i in range(0, 7):
+        huMoments[i] = -1 * math.copysign(1.0, huMoments[i]) * math.log10(abs(huMoments[i])) # Mapeo para agrandar la escala.
+    return huMoments
