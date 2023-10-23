@@ -1,5 +1,6 @@
 import cv2
 import numpy as np
+import variables
 
 base_colours = [[255, 0, 0],
                 [0, 255, 0],
@@ -43,7 +44,7 @@ def main():
     selected_key = 49  # 1 en ASCII
     points = []
 
-    cap = cv2.VideoCapture(0)
+    cap = cv2.VideoCapture(variables.webcamId)
     _, frame = cap.read()
     h, w, _ = frame.shape
 
@@ -52,7 +53,9 @@ def main():
     cv2.namedWindow(seeds_map_window)
 
     cv2.setMouseCallback(frame_window, click_event)
-
+    print('SPACE to watersheld')
+    print('(1 to 9) to change number')
+    print('q to quit')
     while True:
         _, frame = cap.read()
         frame_copy = frame.copy()
@@ -77,8 +80,7 @@ def main():
         if key == 32:
             watershed(frame.copy())
             points = []
-            # seeds = np.zeros((1198, 1198), np.uint8)
-            seeds = np.zeros((480, 640), np.uint8)
+            seeds = np.zeros(variables.sizeTuple, np.uint8)
 
         if ord('1') <= key <= ord('9'):
             selected_key = key
