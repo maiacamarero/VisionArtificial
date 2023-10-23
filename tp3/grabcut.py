@@ -10,7 +10,7 @@ def main():
 
 def captureImage():
     camera = cv.VideoCapture(variables.webcamId)
-    raw_input('Press enter to capture the image')
+    raw_input('Press ENTER to capture the image')
     _, image = camera.read()
     image = cv.flip(image, 1)
     return image
