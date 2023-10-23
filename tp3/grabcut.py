@@ -5,12 +5,11 @@ import variables
 
 
 def main():
-    image = captureImage()
-    grabcut(image)
+    grabcut(captureImage())
 
 def captureImage():
-    camera = cv.VideoCapture(variables.webcamId)
     raw_input('Press ENTER to capture the image')
+    camera = cv.VideoCapture(variables.webcamId)
     _, image = camera.read()
     image = cv.flip(image, 1)
     return image
