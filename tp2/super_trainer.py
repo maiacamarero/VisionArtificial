@@ -61,8 +61,3 @@ output_path = os.path.join(output_folder, 'knn_super_model.joblib')
 
 # Save the K-NN model to the specified path
 joblib.dump(knn_classifier, output_path)
-
-# Example: Predict a new shape using KNN
-new_shape_path_knn = variables.triangle6
-predicted_label_knn, predicted_label_str_knn = predict_label(knn_classifier, new_shape_path_knn)
-print(f"Predicted Label for the new shape (KNN): {predicted_label_knn} ({predicted_label_str_knn})")

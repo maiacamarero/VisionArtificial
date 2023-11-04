@@ -2,7 +2,7 @@ import cv2 as cv
 import joblib
 
 #------------------------------------------
-
+ 
 import huMomentsGenerator
 import variables
 import labels
@@ -85,7 +85,7 @@ def main():
                 # ----------------------------------------- 
                 # Implementando el trainer para predecir la clasificacion de la nueva figura
 
-                knn_super_model = joblib.load("knn_super_model.joblib")
+                knn_super_model = joblib.load(variables.predictor_path)
 
                 hu_moments = calculate_hu_moments(second_largest_contour)
 
