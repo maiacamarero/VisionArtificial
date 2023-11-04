@@ -10,7 +10,7 @@ __pycache__
 
 #archivos unicos para cada uno o para evitar solapamientos
 
-variables_toni.py
+variables.py
 extra_huMoments.csv
 huMoments.csv
 knn_super_model.joblib
