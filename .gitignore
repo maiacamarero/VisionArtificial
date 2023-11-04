@@ -1,7 +1,14 @@
+
+#------------------------------------------
+
 # created by virtualenv automatically
 venv
 .idea
 __pycache__
+
+#------------------------------------------
+
+#archivos unicos para cada uno o para evitar solapamientos
 
 variables.py
 extra_huMoments.csv
