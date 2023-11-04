@@ -45,9 +45,19 @@ def process_images_folder():
     # Create a DataFrame from the list
     hu_moments_df = pd.DataFrame(hu_moments_data)
 
-    # Save the DataFrame to a CSV file
-    hu_moments_df.to_csv("extra_huMoments.csv", index=False)
-    print("HuMoments have been saved.")
+    #------------------------------------------
+
+    # Specify the output folder (archivos) within the project folder (tp2)
+    output_folder = os.path.join(os.path.dirname(__file__), 'archivos')
+
+    # Create the output folder if it doesn't exist
+    os.makedirs(output_folder, exist_ok=True)
+
+    # Save the DataFrame to a CSV file inside the archivos folder
+    output_path = os.path.join(output_folder, 'extra_huMoments.csv')
+    hu_moments_df.to_csv(output_path, index=False)
+
+    print("HuMoments have been saved to the extra_huMoments.csv in archivos folder.")
 
 #------------------------------------------
 

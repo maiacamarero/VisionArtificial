@@ -25,9 +25,19 @@ def get_second_largest_contour(contours):
     return None
 
 def save_hu_moments(contour, label):
+
+    # Specify the output folder (archivos) within the project folder (tp2)
+    output_folder = os.path.join(os.path.dirname(__file__), 'archivos')
+
+    # Create the output folder if it doesn't exist
+    os.makedirs(output_folder, exist_ok=True)
+
+    # Specify the path to the CSV file inside the archivos folder
+    output_path = os.path.join(output_folder, 'huMoments.csv')
+
     # Check if the file exists, if not, write the header
-    header_exists = os.path.exists('huMoments.csv')
-    with open('huMoments.csv', 'a', newline='') as file:
+    header_exists = os.path.exists(output_path)
+    with open(output_path, 'a', newline='') as file:
         writer = csv.writer(file)
 
         # Write the header if it doesn't exist

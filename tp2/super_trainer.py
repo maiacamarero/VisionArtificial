@@ -3,6 +3,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.metrics import accuracy_score
 import joblib
+import os  
 
 #------------------------------------------
 
@@ -49,8 +50,17 @@ y_pred_knn = knn_classifier.predict(X_test)
 accuracy_knn = accuracy_score(y_test, y_pred_knn)
 print(f"k-Nearest Neighbors Accuracy: {accuracy_knn}")
 
-# Save the K-NN model
-joblib.dump(knn_classifier, 'knn_super_model.joblib')
+# Specify the output folder (archivos) within the project folder (tp2)
+output_folder = os.path.join(os.path.dirname(__file__), 'archivos')
+
+# Create the output folder if it doesn't exist
+os.makedirs(output_folder, exist_ok=True)
+
+# Specify the path to the joblib file inside the archivos folder
+output_path = os.path.join(output_folder, 'knn_super_model.joblib')
+
+# Save the K-NN model to the specified path
+joblib.dump(knn_classifier, output_path)
 
 # Example: Predict a new shape using KNN
 new_shape_path_knn = variables.triangle6
