@@ -1,5 +1,9 @@
 # created by virtualenv automatically
 venv
 .idea
-variables.py
 __pycache__
+
+variables.py
+extra_huMoments.csv
+huMoments.csv
+knn_super_model.joblib
