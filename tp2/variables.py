@@ -4,9 +4,9 @@ webcamId = 1
 
 #------------------------------------------
 
-extra_huMoments_path = r"C:\Users\tonim\OneDrive - URV\UNIVERSIDAD\ERASMUS 2023-2024\ASIGNATURAS\Vision_Artificial\VisionArtificial\tp2\extra_huMoments.csv"
-huMoments_path = r"C:\Users\tonim\OneDrive - URV\UNIVERSIDAD\ERASMUS 2023-2024\ASIGNATURAS\Vision_Artificial\VisionArtificial\tp2\huMoments.csv"
-base_folder_path = r"C:\Users\tonim\OneDrive - URV\UNIVERSIDAD\ERASMUS 2023-2024\ASIGNATURAS\Vision_Artificial\shapes"
+extra_huMoments_path = r"C:\Users\tonim\OneDrive - URV\UNIVERSIDAD\ERASMUS 2023-2024\ASIGNATURAS\Vision_Artificial\VisionArtificial\extra_huMoments.csv"
+huMoments_path = r"C:\Users\tonim\OneDrive - URV\UNIVERSIDAD\ERASMUS 2023-2024\ASIGNATURAS\Vision_Artificial\VisionArtificial\huMoments.csv"
+shapes_folder_path = r"C:\Users\tonim\OneDrive - URV\UNIVERSIDAD\ERASMUS 2023-2024\ASIGNATURAS\Vision_Artificial\shapes"
 
 #------------------------------------------
 
