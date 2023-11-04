@@ -86,7 +86,7 @@ def main():
 
         if second_largest_contour is not None:
             cv.drawContours(original_image, [second_largest_contour], -1, (255, 0, 255), 3)
-            cv.imshow(window_name, binary_image)
+            cv.imshow(window_name, original_image)
 
             #------------------------------------------
 

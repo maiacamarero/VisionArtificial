@@ -1,5 +1,4 @@
 # created by virtualenv automatically
 venv
 .idea
-variables.py
 __pycache__
