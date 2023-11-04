@@ -4,6 +4,10 @@ import pandas as pd
 
 #------------------------------------------
 
+import variables
+
+#------------------------------------------
+
 def calculate_hu_moments(image_path):
     # Load the image in grayscale
     image = cv.imread(image_path, cv.IMREAD_GRAYSCALE)
@@ -20,7 +24,7 @@ def calculate_hu_moments(image_path):
 #------------------------------------------
 
 def process_images_folder():
-    base_folder = r"C:\Users\tonim\OneDrive - URV\UNIVERSIDAD\ERASMUS 2023-2024\ASIGNATURAS\Vision_Artificial\shapes"
+    base_folder = variables.base_folder_path
 
     # Initialize an empty list to store the results
     hu_moments_data = []

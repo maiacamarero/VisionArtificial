@@ -21,11 +21,11 @@ def predict_label(classifier, image_path):
 #------------------------------------------
 
 # Load the first CSV file
-csv_file1 = "extra_huMoments.csv"
+csv_file1 = variables.extra_huMoments_path
 hu_moments_df1 = pd.read_csv(csv_file1)
 
 # Load the second CSV file
-csv_file2 = "huMoments.csv"
+csv_file2 = variables.huMoments_path
 hu_moments_df2 = pd.read_csv(csv_file2)
 
 # Concatenate the data from both files
