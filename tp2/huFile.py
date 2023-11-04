@@ -4,7 +4,7 @@ import pandas as pd
 
 #------------------------------------------
 
-import variables_toni
+import variables
 
 #------------------------------------------
 
@@ -24,7 +24,7 @@ def calculate_hu_moments(image_path):
 #------------------------------------------
 
 def process_images_folder():
-    base_folder = variables_toni.shapes_folder_path
+    base_folder = variables.shapes_folder_path
 
     # Initialize an empty list to store the results
     hu_moments_data = []
