@@ -4,7 +4,7 @@ import cv2 as cv
 
 #------------------------------------------
 
-import variables
+import variables_toni
 
 #------------------------------------------
 
@@ -46,7 +46,7 @@ def main():
 
     #------------------------------------------
 
-    webcam = cv.VideoCapture(variables.webcamId)
+    webcam = cv.VideoCapture(variables_toni.webcamId)
 
     window_name = 'Image Processing'
     cv.namedWindow(window_name, cv.WINDOW_KEEPRATIO)

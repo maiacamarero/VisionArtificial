@@ -8,7 +8,7 @@ import joblib
 
 import huFile
 import labels
-import variables
+import variables_toni
 
 #------------------------------------------
 
@@ -21,11 +21,11 @@ def predict_label(classifier, image_path):
 #------------------------------------------
 
 # Load the first CSV file
-csv_file1 = variables.extra_huMoments_path
+csv_file1 = variables_toni.extra_huMoments_path
 hu_moments_df1 = pd.read_csv(csv_file1)
 
 # Load the second CSV file
-csv_file2 = variables.huMoments_path
+csv_file2 = variables_toni.huMoments_path
 hu_moments_df2 = pd.read_csv(csv_file2)
 
 # Concatenate the data from both files
@@ -53,6 +53,6 @@ print(f"k-Nearest Neighbors Accuracy: {accuracy_knn}")
 joblib.dump(knn_classifier, 'knn_super_model.joblib')
 
 # Example: Predict a new shape using KNN
-new_shape_path_knn = variables.triangle6
+new_shape_path_knn = variables_toni.triangle6
 predicted_label_knn, predicted_label_str_knn = predict_label(knn_classifier, new_shape_path_knn)
 print(f"Predicted Label for the new shape (KNN): {predicted_label_knn} ({predicted_label_str_knn})")

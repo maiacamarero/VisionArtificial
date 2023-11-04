@@ -4,7 +4,7 @@ import joblib
 #------------------------------------------
 
 import huMomentsGenerator
-import variables
+import variables_toni
 import labels
 
 # -----------------------------------------
@@ -33,7 +33,7 @@ def main():
 
     # -----------------------------------------
 
-    webcam = cv.VideoCapture(variables.webcamId)
+    webcam = cv.VideoCapture(variables_toni.webcamId)
 
     window_name = 'Image Processing'
     cv.namedWindow(window_name, cv.WINDOW_KEEPRATIO)
